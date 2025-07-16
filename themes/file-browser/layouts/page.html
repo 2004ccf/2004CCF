@@ -1,0 +1,24 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  
+  {{ if .Date }}
+    {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+    {{ $dateHuman := .Date | time.Format "2006-01-02 15:04" }}
+    <p style="color: #6c757d; margin-bottom: 1rem;">
+      <small>📅 最後更新: <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time></small>
+    </p>
+  {{ end }}
+  
+  <div class="content-body">
+    {{ .Content }}
+  </div>
+  
+  {{ if .Params.tags }}
+    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #dee2e6;">
+      <small style="color: #6c757d;">標籤: </small>
+      {{ range .Params.tags }}
+        <span style="background-color: #e9ecef; padding: 0.25rem 0.5rem; border-radius: 3px; margin-right: 0.5rem; font-size: 0.875rem;">{{ . }}</span>
+      {{ end }}
+    </div>
+  {{ end }}
+{{ end }}

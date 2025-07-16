@@ -1,0 +1,32 @@
+baseURL = 'https://2004ccf.github.io/2004CCF/'
+languageCode = 'zh-cn'
+title = 'Warehouse 文件管理系统'
+theme = 'file-browser'
+
+# 内容处理设置
+buildDrafts = false
+buildFuture = true
+buildExpired = true
+
+# 确保所有文件都被正确处理
+ignoreFiles = []
+
+# 默认内容设置
+[frontmatter]
+date = ['date', 'publishDate', 'lastmod']
+lastmod = [':git', 'lastmod', 'date', 'publishDate']
+publishDate = ['publishDate', 'date']
+expiryDate = ['expiryDate']
+
+[params]
+  description = '基于Hugo的文件管理系统'
+  author = 'Administrator'
+
+# 标记设置
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = 'github'
+    lineNos = true
