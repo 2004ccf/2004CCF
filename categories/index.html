@@ -1,7 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<html lang="zh-cn" dir="ltr">
 <head>
-  {{ partial "head.html" . }}
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Categories | 我的Hugo网站</title>
+
+      <link rel="stylesheet" href="/2004CCF/css/main.min.f81933fb3fc48156d950bfe3b0d0debc230886d4030e2462bac84788ebff3ac9.css" integrity="sha256-&#43;Bkz&#43;z/EgVbZUL/jsNDevCMIhtQDDiRiushHiOv/Osk=" crossorigin="anonymous">
+
+
+        <script src="/2004CCF/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+
   <style>
     * {
       margin: 0;
@@ -190,7 +199,7 @@
       margin-right: 0.5rem;
     }
     
-    /* 響應式設計 */
+     
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
@@ -208,7 +217,7 @@
       }
     }
     
-    /* 改善文件列表顯示 */
+     
     .file-list {
       display: grid;
       grid-template-columns: 1fr;
@@ -230,7 +239,7 @@
       transform: translateY(-2px);
     }
     
-    /* 改善统计信息显示 */
+     
     .stats {
       background-color: #f8f9fa;
       padding: 1.5rem;
@@ -261,14 +270,14 @@
       transform: translateY(-3px);
     }
     
-    /* 確保內容區域充分利用空間 */
+     
     .welcome-section,
     .content-body {
       width: 100%;
       max-width: none;
     }
     
-    /* 子菜單樣式 */
+     
     .submenu {
       list-style: none;
       margin-left: 1.5rem;
@@ -306,7 +315,7 @@
       font-size: 0.8rem;
     }
     
-    /* 文件夾標題容器 */
+     
     .folder-header {
       display: flex;
       align-items: center;
@@ -321,7 +330,7 @@
       background-color: #e9ecef;
     }
 
-    /* 展開/收起箭頭 */
+     
     .folder-toggle {
       margin-right: 0.5rem;
       font-size: 0.8rem;
@@ -333,7 +342,7 @@
       transform: rotate(90deg);
     }
 
-    /* 子菜單默認隱藏 */
+     
     .submenu.collapsed {
       display: none;
     }
@@ -342,17 +351,17 @@
       display: block;
     }
 
-    /* 沒有子項的目錄不顯示箭頭 */
+     
     .folder-item[data-has-children="false"] .folder-toggle {
       display: none;
     }
 
-    /* 調整文件夾圖標位置 */
+     
     .folder-header .folder-icon {
       margin-right: 0.5rem;
     }
     
-    /* 視頻容器樣式 */
+     
     .video-container {
       margin: 1.5rem 0;
       border-radius: 8px;
@@ -369,7 +378,7 @@
       border-radius: 4px;
     }
 
-    /* 響應式視頻 */
+     
     @media (max-width: 768px) {
       .video-container {
         margin: 1rem 0;
@@ -393,56 +402,26 @@
   <div class="container">
     <aside class="sidebar">
       <ul class="folder-list">
-        {{ range .Site.Sections }}
-          <li class="folder-item{{ if eq .RelPermalink $.RelPermalink }} active{{ end }}" data-has-children="{{ if or .Pages .RegularPages }}true{{ else }}false{{ end }}">
-            <div class="folder-header">
-              <span class="folder-toggle">▶</span>
-              <a href="{{ .RelPermalink }}">
-                <span class="folder-icon">📂</span>
-                {{ .Section }}
-              </a>
-            </div>
-            {{ if or .Pages .RegularPages }}
-              <ul class="submenu collapsed">
-                {{ range .RegularPages }}
-                  <li class="submenu-item{{ if eq .RelPermalink $.RelPermalink }} active{{ end }}">
-                    <a href="{{ .RelPermalink }}">
-                      <span class="file-icon">📄</span>
-                      {{ if .Title }}
-                        {{ .Title }}
-                      {{ else }}
-                        {{ .File.TranslationBaseName | replaceRE "[-_]" " " | humanize }}
-                      {{ end }}
-                    </a>
-                  </li>
-                {{ end }}
-              </ul>
-            {{ end }}
-          </li>
-        {{ end }}
+        
       </ul>
     </aside>
     
     <main class="content">
-      {{ block "main" . }}{{ end }}
+      
+  <h1>Categories</h1>
+  
+  
+
     </main>
   </div>
 
   <script>
-    // 搜索数据
+    
     const searchData = [
-      {{ range .Site.RegularPages }}
-      {
-        title: {{ .Title | jsonify }},
-        content: {{ .Plain | jsonify }},
-        summary: {{ .Summary | jsonify }},
-        url: {{ .RelPermalink | jsonify }},
-        section: {{ .Section | jsonify }}
-      },
-      {{ end }}
+      
     ];
 
-    // 搜索功能
+    
     function performSearch(query) {
       if (!query || query.length < 2) {
         return [];
@@ -455,17 +434,17 @@
         let score = 0;
         let matchedText = '';
         
-        // 标题匹配 (权重更高)
+        
         if (page.title.toLowerCase().includes(queryLower)) {
           score += 10;
           matchedText = page.title;
         }
         
-        // 内容匹配
+        
         if (page.content.toLowerCase().includes(queryLower)) {
           score += 5;
           
-          // 获取匹配内容的上下文
+          
           const contentLower = page.content.toLowerCase();
           const index = contentLower.indexOf(queryLower);
           if (index !== -1) {
@@ -484,11 +463,11 @@
         }
       });
 
-      // 按分数排序并返回前5个结果
+      
       return results.sort((a, b) => b.score - a.score).slice(0, 5);
     }
 
-    // 显示搜索结果
+    
     function displayResults(results) {
       const resultsContainer = document.getElementById('searchResults');
       
@@ -509,7 +488,7 @@
       resultsContainer.style.display = 'block';
     }
 
-    // 初始化搜索功能
+    
     document.addEventListener('DOMContentLoaded', function() {
       const searchInput = document.getElementById('searchInput');
       const searchResults = document.getElementById('searchResults');
@@ -524,21 +503,21 @@
           return;
         }
 
-        // 防抖处理，避免频繁搜索
+        
         searchTimeout = setTimeout(() => {
           const results = performSearch(query);
           displayResults(results);
         }, 300);
       });
 
-      // 点击其他地方隐藏搜索结果
+      
       document.addEventListener('click', function(e) {
         if (!e.target.closest('.search-container')) {
           searchResults.style.display = 'none';
         }
       });
 
-      // 点击搜索框显示已有结果
+      
       searchInput.addEventListener('focus', function() {
         if (this.value.trim().length >= 2) {
           const results = performSearch(this.value.trim());
@@ -546,7 +525,7 @@
         }
       });
       
-      // 文件夾展開/收起功能
+      
       const folderItems = document.querySelectorAll('.folder-item[data-has-children="true"]');
       
       folderItems.forEach(item => {
@@ -555,21 +534,21 @@
         const submenu = item.querySelector('.submenu');
         
         folderHeader.addEventListener('click', function(e) {
-          // 防止點擊鏈接時觸發展開/收起
+          
           if (e.target.tagName === 'A') {
             return;
           }
           
-          // 切換展開狀態
+          
           const isExpanded = submenu.classList.contains('expanded');
           
           if (isExpanded) {
-            // 收起
+            
             submenu.classList.remove('expanded');
             submenu.classList.add('collapsed');
             folderToggle.classList.remove('expanded');
           } else {
-            // 展開
+            
             submenu.classList.remove('collapsed');
             submenu.classList.add('expanded');
             folderToggle.classList.add('expanded');
@@ -577,7 +556,7 @@
         });
       });
       
-      // 可選：記住用戶的展開狀態
+      
       const saveExpandedState = () => {
         const expandedFolders = [];
         folderItems.forEach(item => {
@@ -590,7 +569,7 @@
         localStorage.setItem('expandedFolders', JSON.stringify(expandedFolders));
       };
       
-      // 可選：恢復用戶的展開狀態
+      
       const restoreExpandedState = () => {
         const savedState = localStorage.getItem('expandedFolders');
         if (savedState) {
@@ -608,16 +587,16 @@
         }
       };
       
-      // 頁面加載時恢復狀態
+      
       restoreExpandedState();
       
-      // 點擊時保存狀態
+      
       folderItems.forEach(item => {
         const folderHeader = item.querySelector('.folder-header');
         folderHeader.addEventListener('click', saveExpandedState);
       });
       
-      // 自動展開當前頁面所在的目錄
+      
       const currentPage = window.location.pathname;
       folderItems.forEach(item => {
         const submenu = item.querySelector('.submenu');
@@ -625,7 +604,7 @@
         
         links.forEach(link => {
           if (link.getAttribute('href') === currentPage) {
-            // 展開包含當前頁面的目錄
+            
             submenu.classList.remove('collapsed');
             submenu.classList.add('expanded');
             item.querySelector('.folder-toggle').classList.add('expanded');
