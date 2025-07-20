@@ -1,0 +1,45 @@
+{{ $destination := .Destination }}
+{{ $text := .Text }}
+{{ $title := .Title }}
+
+{{ if (hasPrefix $destination "http") }}
+  <!-- 外部鏈接 - 保持原樣 -->
+  <img src="{{ $destination }}" alt="{{ $text }}" {{ if $title }}title="{{ $title }}"{{ end }} />
+{{ else if (or (hasSuffix $destination ".mp4") (hasSuffix $destination ".webm") (hasSuffix $destination ".ogg") (hasSuffix $destination ".mov") (hasSuffix $destination ".avi")) }}
+  <!-- 視頻文件 - 渲染為 video 標籤 -->
+  {{ $videoURL := "" }}
+  {{ if (hasPrefix $destination "/") }}
+    <!-- 絕對路徑 -->
+    {{ $videoURL = $destination | absURL }}
+  {{ else }}
+    <!-- 相對路徑 - 改進的處理邏輯 -->
+    {{ $currentPage := .Page }}
+    {{ $currentDir := path.Dir $currentPage.File.Path }}
+    {{ $videoPath := printf "%s/%s" $currentDir $destination }}
+    {{ $videoURL = $videoPath | absURL }}
+  {{ end }}
+  
+  <div class="video-container">
+    <video controls style="width: 100%; height: auto; max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <source src="{{ $videoURL }}" type="video/mp4">
+      <source src="{{ $videoURL }}" type="video/webm">
+      <source src="{{ $videoURL }}" type="video/ogg">
+      您的瀏覽器不支持視頻播放。
+    </video>
+    {{ if $text }}<p class="video-caption">{{ $text }}</p>{{ end }}
+  </div>
+{{ else }}
+  <!-- 普通圖片 - 保持原樣 -->
+  {{ $imageURL := "" }}
+  {{ if (hasPrefix $destination "/") }}
+    <!-- 絕對路徑 -->
+    {{ $imageURL = $destination | absURL }}
+  {{ else }}
+    <!-- 相對路徑 - 改進的處理邏輯 -->
+    {{ $currentPage := .Page }}
+    {{ $currentDir := path.Dir $currentPage.File.Path }}
+    {{ $imagePath := printf "%s/%s" $currentDir $destination }}
+    {{ $imageURL = $imagePath | absURL }}
+  {{ end }}
+  <img src="{{ $imageURL }}" alt="{{ $text }}" {{ if $title }}title="{{ $title }}"{{ end }} />
+{{ end }} 

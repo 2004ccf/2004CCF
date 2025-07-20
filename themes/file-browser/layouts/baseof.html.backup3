@@ -351,35 +351,6 @@
     .folder-header .folder-icon {
       margin-right: 0.5rem;
     }
-    
-    /* 視頻容器樣式 */
-    .video-container {
-      margin: 1.5rem 0;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      background-color: #f8f9fa;
-      padding: 1rem;
-    }
-
-    .video-container video {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 4px;
-    }
-
-    /* 響應式視頻 */
-    @media (max-width: 768px) {
-      .video-container {
-        margin: 1rem 0;
-        padding: 0.5rem;
-      }
-      
-      .video-container video {
-        max-width: 100%;
-      }
-    }
   </style>
 </head>
 <body>
@@ -408,11 +379,7 @@
                   <li class="submenu-item{{ if eq .RelPermalink $.RelPermalink }} active{{ end }}">
                     <a href="{{ .RelPermalink }}">
                       <span class="file-icon">📄</span>
-                      {{ if .Title }}
-                        {{ .Title }}
-                      {{ else }}
-                        {{ .File.TranslationBaseName | replaceRE "[-_]" " " | humanize }}
-                      {{ end }}
+                      {{ .Title }}
                     </a>
                   </li>
                 {{ end }}

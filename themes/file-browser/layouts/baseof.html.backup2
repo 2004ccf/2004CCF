@@ -305,81 +305,6 @@
       margin-right: 0.5rem;
       font-size: 0.8rem;
     }
-    
-    /* 文件夾標題容器 */
-    .folder-header {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      padding: 0.75rem;
-      margin-bottom: 0.25rem;
-      border-radius: 6px;
-      transition: background-color 0.2s;
-    }
-
-    .folder-header:hover {
-      background-color: #e9ecef;
-    }
-
-    /* 展開/收起箭頭 */
-    .folder-toggle {
-      margin-right: 0.5rem;
-      font-size: 0.8rem;
-      transition: transform 0.2s;
-      color: #6c757d;
-    }
-
-    .folder-toggle.expanded {
-      transform: rotate(90deg);
-    }
-
-    /* 子菜單默認隱藏 */
-    .submenu.collapsed {
-      display: none;
-    }
-
-    .submenu.expanded {
-      display: block;
-    }
-
-    /* 沒有子項的目錄不顯示箭頭 */
-    .folder-item[data-has-children="false"] .folder-toggle {
-      display: none;
-    }
-
-    /* 調整文件夾圖標位置 */
-    .folder-header .folder-icon {
-      margin-right: 0.5rem;
-    }
-    
-    /* 視頻容器樣式 */
-    .video-container {
-      margin: 1.5rem 0;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      background-color: #f8f9fa;
-      padding: 1rem;
-    }
-
-    .video-container video {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 4px;
-    }
-
-    /* 響應式視頻 */
-    @media (max-width: 768px) {
-      .video-container {
-        margin: 1rem 0;
-        padding: 0.5rem;
-      }
-      
-      .video-container video {
-        max-width: 100%;
-      }
-    }
   </style>
 </head>
 <body>
@@ -394,25 +319,18 @@
     <aside class="sidebar">
       <ul class="folder-list">
         {{ range .Site.Sections }}
-          <li class="folder-item{{ if eq .RelPermalink $.RelPermalink }} active{{ end }}" data-has-children="{{ if or .Pages .RegularPages }}true{{ else }}false{{ end }}">
-            <div class="folder-header">
-              <span class="folder-toggle">▶</span>
-              <a href="{{ .RelPermalink }}">
-                <span class="folder-icon">📂</span>
-                {{ .Section }}
-              </a>
-            </div>
+          <li class="folder-item{{ if eq .RelPermalink $.RelPermalink }} active{{ end }}">
+            <a href="{{ .RelPermalink }}">
+              <span class="folder-icon">📂</span>
+              {{ .Section }}
+            </a>
             {{ if or .Pages .RegularPages }}
-              <ul class="submenu collapsed">
+              <ul class="submenu">
                 {{ range .RegularPages }}
                   <li class="submenu-item{{ if eq .RelPermalink $.RelPermalink }} active{{ end }}">
                     <a href="{{ .RelPermalink }}">
                       <span class="file-icon">📄</span>
-                      {{ if .Title }}
-                        {{ .Title }}
-                      {{ else }}
-                        {{ .File.TranslationBaseName | replaceRE "[-_]" " " | humanize }}
-                      {{ end }}
+                      {{ .Title }}
                     </a>
                   </li>
                 {{ end }}
@@ -544,93 +462,6 @@
           const results = performSearch(this.value.trim());
           displayResults(results);
         }
-      });
-      
-      // 文件夾展開/收起功能
-      const folderItems = document.querySelectorAll('.folder-item[data-has-children="true"]');
-      
-      folderItems.forEach(item => {
-        const folderHeader = item.querySelector('.folder-header');
-        const folderToggle = item.querySelector('.folder-toggle');
-        const submenu = item.querySelector('.submenu');
-        
-        folderHeader.addEventListener('click', function(e) {
-          // 防止點擊鏈接時觸發展開/收起
-          if (e.target.tagName === 'A') {
-            return;
-          }
-          
-          // 切換展開狀態
-          const isExpanded = submenu.classList.contains('expanded');
-          
-          if (isExpanded) {
-            // 收起
-            submenu.classList.remove('expanded');
-            submenu.classList.add('collapsed');
-            folderToggle.classList.remove('expanded');
-          } else {
-            // 展開
-            submenu.classList.remove('collapsed');
-            submenu.classList.add('expanded');
-            folderToggle.classList.add('expanded');
-          }
-        });
-      });
-      
-      // 可選：記住用戶的展開狀態
-      const saveExpandedState = () => {
-        const expandedFolders = [];
-        folderItems.forEach(item => {
-          const submenu = item.querySelector('.submenu');
-          if (submenu.classList.contains('expanded')) {
-            const folderName = item.querySelector('a').textContent.trim();
-            expandedFolders.push(folderName);
-          }
-        });
-        localStorage.setItem('expandedFolders', JSON.stringify(expandedFolders));
-      };
-      
-      // 可選：恢復用戶的展開狀態
-      const restoreExpandedState = () => {
-        const savedState = localStorage.getItem('expandedFolders');
-        if (savedState) {
-          const expandedFolders = JSON.parse(savedState);
-          folderItems.forEach(item => {
-            const folderName = item.querySelector('a').textContent.trim();
-            if (expandedFolders.includes(folderName)) {
-              const submenu = item.querySelector('.submenu');
-              const folderToggle = item.querySelector('.folder-toggle');
-              submenu.classList.remove('collapsed');
-              submenu.classList.add('expanded');
-              folderToggle.classList.add('expanded');
-            }
-          });
-        }
-      };
-      
-      // 頁面加載時恢復狀態
-      restoreExpandedState();
-      
-      // 點擊時保存狀態
-      folderItems.forEach(item => {
-        const folderHeader = item.querySelector('.folder-header');
-        folderHeader.addEventListener('click', saveExpandedState);
-      });
-      
-      // 自動展開當前頁面所在的目錄
-      const currentPage = window.location.pathname;
-      folderItems.forEach(item => {
-        const submenu = item.querySelector('.submenu');
-        const links = submenu.querySelectorAll('a');
-        
-        links.forEach(link => {
-          if (link.getAttribute('href') === currentPage) {
-            // 展開包含當前頁面的目錄
-            submenu.classList.remove('collapsed');
-            submenu.classList.add('expanded');
-            item.querySelector('.folder-toggle').classList.add('expanded');
-          }
-        });
       });
     });
   </script>
